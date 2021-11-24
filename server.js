@@ -1,6 +1,8 @@
 const express = require( 'express' );
 const mongoose = require( 'mongoose' );
-mongoose.connect('mongodb://localhost/users_db', {useNewUrlParser: true});
+
+//if the db doesnt exist this will add it for us
+mongoose.connect('mongodb://localhost/animals_db', {useNewUrlParser: true});
 
 const {UserModel} = require( './models/userModel' );
 
@@ -15,32 +17,18 @@ app.set( 'view engine', 'ejs' );
 // This code is deprecated, use instead line 10
 //app.use( bodyParser.urlencoded({extended:true}) );
 app.use( express.urlencoded({extended:true}) );
-const users = [
-    {
-        name : "Michael Miller",
-        id : 123
-    },
-    {
-        name : "Julie Gomez",
-        id : 456
-    },
-    {
-        name : "Roger Martinez",
-        id : 789
-    },
-    {
-        name : "Alex Santos",
-        id : 555
-    }
-];
 
-app.get( '/users', function( request, response ){
+app.get( '/mongooses/new', function( request, response ){
+    response.render( 'index' );  
+});
+
+app.get( '/', function( request, response ){
     UserModel
         .getUsers()
         .then( data => {
             console.log( data );
-            response.render( 'index', { users : data } );
-        });  
+            response.render( 'viewAll', { users : data } );
+        });
 });
 
 app.get( '/users/getById', function( request, response ){
@@ -59,8 +47,8 @@ app.get( '/users/getById', function( request, response ){
         });
 });
 
-app.get( '/users/:identifier', function( request, response ){
-    let id = Number( request.params.identifier );
+app.get( '/users/:id', function( request, response ){
+    let id = Number( request.params.id );
 
     UserModel
         .getUserById( id )
@@ -68,28 +56,30 @@ app.get( '/users/:identifier', function( request, response ){
             if( result === null ){
                 throw new Error( "That user doesn't exist" );
             }
-            response.render( 'user', { found: true, user: result } );
+            console.log(result);
+            response.render( 'animal', { found: true, user: result } );
+            
         })
         .catch( error => {
-            response.render( 'user', { found: false } );
+            response.render( 'animal', { found: false } );
         });
 });
 
-app.post( '/users/addUser', function( request, response ){
+app.post( '/mongooses', function( request, response ){
     console.log( request.body );
-    const id = Number(request.body.userId);
-    const firstName = request.body.firstName;
-    const lastName = request.body.lastName;
+    const name = request.body.name;
+    const type = request.body.type;
+    const age = Number(request.body.age);
 
     // Run validations to see if the 'id' is not already in the list
-    const newUser = {
-        id,
-        firstName,
-        lastName
+    const newAnimal = {
+        name,
+        type,
+        age
     };
-    console.log( newUser );
+    console.log( newAnimal );
     UserModel
-        .createUser( newUser )
+        .createUser( newAnimal )
         .then( result => {
             console.log( result );
         })
@@ -98,9 +88,67 @@ app.post( '/users/addUser', function( request, response ){
             console.log( err );
         })
 
-    response.redirect( '/users' );
+    response.redirect( '/' );
 });
 
-app.listen( 8080, function(){
-    console.log( "The users server is running in port 8080." );
+app.get( '/mongooses/edit/:id', function( request, response ){
+    let id = Number( request.params.id );
+    UserModel
+        .getUserById( id )
+        .then( result => {
+            if( result === null ){
+                throw new Error( "That user doesn't exist" );
+            }
+            console.log(result);
+            response.render( 'animalUpdate', { found: true, animal: result } );
+            
+        })
+        .catch( error => {
+            response.render( 'animalUpdate', { found: false } );
+        });
+});
+
+app.post( '/mongooses/:id', function( request, response ){
+    console.log( request.body );
+    const name = request.body.name;
+    const type = request.body.type;
+    const age = Number(request.body.age);
+
+    // Run validations to see if the 'id' is not already in the list
+    const newAnimal = {
+        name,
+        type,
+        age
+    };
+    console.log( newAnimal );
+    UserModel
+        .createUser( newAnimal )
+        .then( result => {
+            console.log( result );
+        })
+        .catch( err => {
+            console.log( "Something went wrong!" );
+            console.log( err );
+        })
+
+    response.redirect( '/' );
+});
+
+app.get( '/mongooses/destroy/:id', function( request, response ){
+    let id = Number( request.params.id );
+
+    UserModel.removeAnimal(id)
+        .then( result => {
+            console.log(result);
+            response.redirect( '/' );
+            
+        })
+        .catch( error => {
+            console.log("There was an error while deleting")
+            response.redirect( '/' );
+        });
+});
+
+app.listen( 5000, function(){
+    console.log( "The users server is running in port 5000." );
 });

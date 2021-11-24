@@ -1,25 +1,25 @@
 const mongoose = require( 'mongoose' );
 
 const UserSchema = new mongoose.Schema({
-    firstName : {
+    name : {
         type : String,
         required : true,
         minlength : 3,
         maxlength : 20
     },
-    lastName : {
+    type : {
         type : String,
         required : true,
         minlength : 3,
         maxlength : 20
     },
-    id : {
+    age : {
         type : Number,
         required : true,
-        unique : true
     }
 });
 
+// creates the collection
 const User = mongoose.model( 'users', UserSchema );
 
 const UserModel = {
@@ -31,7 +31,17 @@ const UserModel = {
     },
     getUserById : function( userId ){
         return User.findOne({ id : userId });
+    },
+    removeAnimal : function(userId) {
+        console.log(userId);
+        return User.deleteOne({ id : userId })
+        
+    },
+    updateAnimal : function(userId) {
+        return User.updateOne({id: userId})
     }
+
+
 };
 
 module.exports = {UserModel};

@@ -11,26 +11,26 @@
             Welcome to Mongoose Database
         </h1>
         <h2>
-            Add new animal:
+            edit animal:
         </h2>
-        <form method="POST" action="/mongooses">
+        <form method="POST" action="/mongooses/<%= animal.id %>">
             <div>
                 <label for="name">
                     name: 
                 </label>
-                <input type="text" id="name" name="name" />
+                <input type="text" id="name" name="name" placeholder="<%= animal.name %>" />
             </div>
             <div>
                 <label for="type">
                     type: 
                 </label>
-                <input type="text" id="type" name="type" />
+                <input type="text" id="type" name="type" placeholder="<%= animal.type %>" />
             </div>
             <div>
                 <label for="age">
                     Age:
                 </label>
-                <input type="number" id="age" name="age" />
+                <input type="number" id="age" name="age" placeholder="<%= animal.age %>" />
             </div>
             <button type="submit">
                 Add animal

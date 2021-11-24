@@ -8,18 +8,24 @@
     </head>
     <body>
         <h1>
-            Information about individual user
+            Information about animal:
         </h1>
         <% if( found ){ %>
             <h2>
-                User: <%= user.firstName %> <%= user.lastName %> 
+                Name: <%= user.name %>
+            </h2>
+            <h2>
+                Type: <%= user.type %>
+            </h2>
+            <h2>
+                Age: <%= user.age %>
             </h2>
             <h2>
                 Id: <%= user.id %> 
             </h2>
         <% } else { %>
             <h2>
-                There is no user with that id
+                There is no animal with that id
             </h2>
         <% } %>
     </body>
