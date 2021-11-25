@@ -16,7 +16,7 @@
         <ul>
             <% for( let i = 0; i < users.length; i ++ ){ %>
                 <li>
-                    <%= users[i].name %>, a <%= users[i].type %> is <%= users[i].age %> years old! <a href="/users/<%=users[i].id%>">See</a> <a href="/mongooses/edit/<%=users[i].id%>">Edit</a> <a href="/mongooses/destroy/<%=users[i].id%>">Delete</a>
+                    <%= users[i].name %>, a <%= users[i].type %> is <%= users[i].age %> years old! - <%= users[i].id %><a href="/users/<%=users[i].id%>">See</a> <a href="/mongooses/edit/<%=users[i].id%>">Edit</a> <a href="/mongooses/destroy/<%=users[i].id%>">Delete</a>
                 </li>
                 
             <% } %>

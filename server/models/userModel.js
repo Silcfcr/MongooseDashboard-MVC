@@ -19,7 +19,6 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-// creates the collection
 const User = mongoose.model( 'users', UserSchema );
 
 const UserModel = {
@@ -30,18 +29,16 @@ const UserModel = {
         return User.find();
     },
     getUserById : function( userId ){
-        return User.findOne({ id : userId });
+        return User.findOne({ _id : userId });
     },
-    removeAnimal : function(userId) {
-        console.log(userId);
-        return User.deleteOne({ id : userId })
+    removeAnimal : function(id) {
+        console.log(id);
+        return User.deleteOne({ _id : id })
         
     },
-    updateAnimal : function(userId) {
-        return User.updateOne({id: userId})
+    updateAnimal : function(id, animal) {
+        return User.findByIdAndUpdate({ _id : id }, {$set: animal})
     }
-
-
 };
 
 module.exports = {UserModel};
